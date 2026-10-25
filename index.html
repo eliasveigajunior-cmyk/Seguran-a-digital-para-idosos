@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Segurança Digital para Idosos</title>
+
+    <style>
+        /* ===== CONFIGURAÇÕES GERAIS ===== */
+        :root {
+            --roxo: #8b5cf6;
+            --roxo-escuro: #6d28d9;
+            --preto: #0d0b12;
+            --fundo-card: #191520;
+            --branco: #ffffff;
+            --cinza: #c9c4d4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 18px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--preto);
+            color: var(--branco);
+            line-height: 1.7;
+        }
+
+        button, a {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        a {
+            color: #c4a7ff;
+        }
+
+        /* ===== MENU DE ACESSIBILIDADE ===== */
+        .barra-acessibilidade {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 14px;
+            background: #17121f;
+            border-bottom: 2px solid var(--roxo);
+        }
+
+        .botao-controle {
+            background: var(--roxo);
+            color: white;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .botao-controle:hover {
+            background: var(--roxo-escuro);
+            transform: translateY(-2px);
+        }
+
+        button:focus-visible,
+        a:focus-visible {
+            outline: 3px solid white;
+            outline-offset: 3px;
+        }
+
+        /* ===== CABEÇALHO ===== */
+        header {
+            padding: 65px 20px;
+            text-align: center;
+            background: linear-gradient(
+                135deg,
+                #160d25,
+                #32105b,
+                #100c16
+            );
+            border-bottom: 1px solid #51258b;
+        }
+
+        .etiqueta {
+            display: inline-block;
+            padding: 6px 14px;
+            margin-bottom: 18px;
+            color: #e4d5ff;
+            background: #35145a;
+            border: 1px solid var(--roxo);
+            border-radius: 30px;
+            font-size: 0.85rem;
+        }
+
+        header h1 {
+            max-width: 900px;
+            margin: 0 auto 18px;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            line-height: 1.2;
+        }
+
+        header h1 span {
+            color: #b794ff;
+        }
+
+        header p {
+            max-width: 720px;
+            margin: 0 auto;
+            color: var(--cinza);
+            font-size: 1.1rem;
+        }
+
+        /* ===== CONTEÚDO PRINCIPAL ===== */
+        main {
+            max-width: 1100px;
+            margin: auto;
+            padding: 40px 20px 60px;
+        }
+
+        .secao {
+            margin-bottom: 45px;
+        }
+
+        .secao h2 {
+            color: #bd9aff;
+            font-size: 1.7rem;
+            margin-bottom: 15px;
+        }
+
+        .secao > p {
+            color: var(--cinza);
+            margin-bottom: 20px;
+        }
+
+        /* ===== CARTÕES ===== */
+        .grade-cartoes {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(min(100%, 240px), 1fr)
+            );
+            gap: 20px;
+        }
+
+        .cartao {
+            padding: 25px;
+            background: var(--fundo-card);
+            border: 1px solid #38264e;
+            border-radius: 15px;
+            transition: 0.25s;
+        }
+
+        .cartao:hover {
+            border-color: var(--roxo);
+            transform: translateY(-4px);
+        }
+
+        .icone {
+            display: block;
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+
+        .cartao h3 {
+            color: #d4bdff;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .cartao p {
+            color: var(--cinza);
+        }
+
+        /* ===== LISTA DE DICAS ===== */
+        .lista-dicas {
+            list-style: none;
+            display: grid;
+            gap: 14px;
+        }
+
+        .lista-dicas li {
+            padding: 17px 20px;
+            background: var(--fundo-card);
+            border-left: 4px solid var(--roxo);
+            border-radius: 8px;
+        }
+
+        .lista-dicas strong {
+            color: #d4bdff;
+        }
+
+        /* ===== ÁREA DE AJUDA ===== */
+        .area-ajuda {
+            padding: 30px;
+            text-align: center;
+            background: linear-gradient(135deg, #241137, #17121f);
+            border: 1px solid #7541b8;
+            border-radius: 16px;
+        }
+
+        .area-ajuda h2 {
+            margin-bottom: 12px;
+        }
+
+        .area-ajuda p {
+            color: var(--cinza);
+            margin-bottom: 20px;
+        }
+
+        /* ===== MODAL ===== */
+        .modal-fundo {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.85);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-fundo.aberto {
+            display: flex;
+        }
+
+        .modal-conteudo {
+            position: relative;
+            width: 100%;
+            max-width: 550px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 30px;
+            background: #1c1527;
+            border: 2px solid var(--roxo);
+            border-radius: 16px;
+        }
+
+        .modal-conteudo h2 {
+            color: #c4a7ff;
+            margin-bottom: 15px;
+        }
+
+        .modal-conteudo p {
+            color: var(--cinza);
+            margin-bottom: 20px;
+        }
+
+        .botao-fechar {
+            background: #3b3048;
+            color: white;
+            border: 1px solid #79658d;
+            border-radius: 8px;
+            padding: 10px 16px;
+        }
+
+        /* ===== RODAPÉ ===== */
+        footer {
+            padding: 28px 20px;
+            text-align: center;
+            background: #17121f;
+            border-top: 2px solid #392052;
+        }
+
+        footer p {
+            color: var(--cinza);
+        }
+
+        footer span {
+            color: #c4a7ff;
+        }
+
+        /* ===== CELULARES ===== */
+        @media (max-width: 600px) {
+            .barra-acessibilidade {
+                gap: 8px;
+                padding: 10px;
+            }
+
+            .botao-controle {
+                padding: 9px 11px;
+                font-size: 0.85rem;
+            }
+
+            header {
+                padding: 45px 18px;
+            }
+
+            main {
+                padding: 30px 16px 45px;
+            }
+
+            .cartao {
+                padding: 20px;
+            }
+
+            .modal-conteudo {
+                padding: 22px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition: none !important;
+                animation: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- MENU DE ACESSIBILIDADE -->
+    <nav class="barra-acessibilidade"
+         aria-label="Controles de acessibilidade">
+
+        <button class="botao-controle"
+                id="btnAumentaTexto"
+                type="button">
+            A+ Aumentar
+        </button>
+
+        <button class="botao-controle"
+                id="btnDiminuiTexto"
+                type="button">
+            A− Diminuir
+        </button>
+
+        <button class="botao-controle"
+                id="btnVoz"
+                type="button">
+            🔊 Ouvir página
+        </button>
+
+        <button class="botao-controle"
+                id="btnParar"
+                type="button">
+            ⏹ Parar leitura
+        </button>
+    </nav>
+
+    <!-- CABEÇALHO -->
+    <header>
+        <span class="etiqueta">Conhecimento e proteção</span>
+
+        <h1>
+            Segurança Digital <span>para Idosos</span>
+        </h1>
+
+        <p>
+            Aprenda a utilizar a internet com mais segurança,
+            reconhecer golpes e proteger suas informações pessoais.
+        </p>
+    </header>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main id="conteudoPrincipal">
+
+        <section class="secao">
+            <h2>Bem-vindo à segurança digital!</h2>
+
+            <p>
+                A internet nos ajuda a conversar com familiares,
+                acessar serviços e encontrar informações. Porém,
+                precisamos tomar alguns cuidados para navegar com
+                tranquilidade. Aqui você encontrará orientações
+                simples para proteger seus dados e evitar fraudes.
+            </p>
+        </section>
+
+        <section class="secao">
+            <h2>Principais cuidados na internet</h2>
+
+            <p>
+                Conheça algumas atitudes importantes para manter
+                suas informações protegidas no dia a dia.
+            </p>
+
+            <div class="grade-cartoes">
+
+                <article class="cartao">
+                    <span class="icone" aria-hidden="true">🔒</span>
+                    <h3>Senhas seguras</h3>
+                    <p>
+                        Crie senhas longas, diferentes para cada
+                        conta e difíceis de adivinhar. Nunca
+                        compartilhe suas senhas com desconhecidos.
+                    </p>
+                </article>
+
+                <article class="cartao">
+                    <span class="icone" aria-hidden="true">📩</span>
+                    <h3>Mensagens suspeitas</h3>
+                    <p>
+                        Desconfie de mensagens que pedem dinheiro,
+                        senhas ou dados pessoais, principalmente
+                        quando tentam causar medo ou urgência.
+                    </p>
+                </article>
+
+                <article class="cartao">
+                    <span class="icone" aria-hidden="true">🔗</span>
+                    <h3>Links desconhecidos</h3>
+                    <p>
+                        Evite clicar em links inesperados. Confira
+                        o endereço do site antes de informar dados
+                        pessoais ou bancários.
+                    </p>
+                </article>
+
+                <article class="cartao">
+                    <span class="icone" aria-hidden="true">📱</span>
+                    <h3>Proteção do celular</h3>
+                    <p>
+                        Mantenha o aparelho atualizado, utilize
+                        bloqueio de tela e instale aplicativos
+                        apenas de fontes confiáveis.
+                    </p>
+                </article>
+
+            </div>
+        </section>
+
+        <section class="secao">
+            <h2>Como identificar possíveis golpes</h2>
+
+            <ul class="lista-dicas">
+                <li>
+                    <strong>Promessas boas demais:</strong>
+                    desconfie de prêmios inesperados e ofertas
+                    que parecem boas demais para ser verdade.
+                </li>
+
+                <li>
+                    <strong>Pedidos urgentes de dinheiro:</strong>
+                    confirme a identidade da pessoa por outro
+                    canal antes de realizar qualquer transferência.
+                </li>
+
+                <li>
+                    <strong>Códigos de verificação:</strong>
+                    nunca compartilhe códigos recebidos por SMS
+                    ou aplicativos de mensagens.
+                </li>
+
+                <li>
+                    <strong>Falsos atendentes:</strong>
+                    não forneça senhas nem dados bancários a
+                    pessoas que entram em contato inesperadamente.
+                    Procure os canais oficiais da instituição.
+                </li>
+            </ul>
+        </section>
+
+        <section class="secao">
+            <div class="area-ajuda">
+                <h2>Precisa de ajuda?</h2>
+
+                <p>
+                    Clique no botão abaixo para consultar algumas
+                    orientações sobre como utilizar este site.
+                </p>
+
+                <button class="botao-controle"
+                        id="btnAjuda"
+                        type="button">
+                    Como utilizar o site
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- JANELA DE AJUDA -->
+    <div class="modal-fundo"
+         id="modalAjuda"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="tituloAjuda"
+         aria-hidden="true">
+
+        <div class="modal-conteudo">
+            <h2 id="tituloAjuda">Como utilizar o site</h2>
+
+            <p>
+                <strong>Aumentar:</strong> aumenta o tamanho
+                das letras para facilitar a leitura.
+            </p>
+
+            <p>
+                <strong>Diminuir:</strong> reduz o tamanho
+                das letras.
+            </p>
+
+            <p>
+                <strong>Ouvir página:</strong> inicia a leitura
+                em voz alta do conteúdo principal.
+            </p>
+
+            <p>
+                <strong>Parar leitura:</strong> interrompe
+                a reprodução da voz.
+            </p>
+
+            <p>
+                Lembre-se: nunca compartilhe senhas, códigos
+                de verificação ou dados bancários com pessoas
+                desconhecidas.
+            </p>
+
+            <button class="botao-fechar"
+                    id="btnFechar"
+                    type="button">
+                Fechar
+            </button>
+        </div>
+    </div>
+
+    <!-- RODAPÉ -->
+    <footer>
+        <p>
+            <span>Segurança Digital para Idosos</span>
+            — Informação, prevenção e acessibilidade.
+        </p>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // ===== AUMENTAR E DIMINUIR A FONTE =====
+        let tamanhoFonteAtual = 18;
+
+        const tamanhoMinimo = 14;
+        const tamanhoMaximo = 30;
+        const passoFonte = 2;
+
+        const btnAumentaTexto =
+            document.getElementById("btnAumentaTexto");
+
+        const btnDiminuiTexto =
+            document.getElementById("btnDiminuiTexto");
+
+        function atualizarFonte() {
+            document.documentElement.style.fontSize =
+                tamanhoFonteAtual + "px";
+        }
+
+        btnAumentaTexto.addEventListener("click", function () {
+            if (tamanhoFonteAtual < tamanhoMaximo) {
+                tamanhoFonteAtual = Math.min(
+                    tamanhoFonteAtual + passoFonte,
+                    tamanhoMaximo
+                );
+
+                atualizarFonte();
+            }
+        });
+
+        btnDiminuiTexto.addEventListener("click", function () {
+            if (tamanhoFonteAtual > tamanhoMinimo) {
+                tamanhoFonteAtual = Math.max(
+                    tamanhoFonteAtual - passoFonte,
+                    tamanhoMinimo
+                );
+
+                atualizarFonte();
+            }
+        });
+
+        // ===== LEITURA EM VOZ ALTA =====
+        const btnVoz = document.getElementById("btnVoz");
+        const btnParar = document.getElementById("btnParar");
+
+        let lendo = false;
+        let falaAtual = null;
+
+        function pararLeitura() {
+            window.speechSynthesis.cancel();
+
+            lendo = false;
+            falaAtual = null;
+
+            btnVoz.textContent = "🔊 Ouvir página";
+        }
+
+        function lerEmVozAlta() {
+            if (!("speechSynthesis" in window)) {
+                alert(
+                    "Seu navegador não oferece suporte à leitura em voz alta."
+                );
+                return;
+            }
+
+            // Se já estiver lendo, o botão interrompe a leitura.
+            if (lendo) {
+                pararLeitura();
+                return;
+            }
+
+            const conteudo =
+                document.getElementById("conteudoPrincipal");
+
+            const texto = conteudo.innerText.trim();
+
+            if (!texto) {
+                return;
+            }
+
+            window.speechSynthesis.cancel();
+
+            falaAtual = new SpeechSynthesisUtterance(texto);
+            falaAtual.lang = "pt-BR";
+            falaAtual.rate = 0.9;
+
+            falaAtual.onend = function () {
+                lendo = false;
+                falaAtual = null;
+                btnVoz.textContent = "🔊 Ouvir página";
+            };
+
+            falaAtual.onerror = function () {
+                lendo = false;
+                falaAtual = null;
+                btnVoz.textContent = "🔊 Ouvir página";
+            };
+
+            lendo = true;
+            btnVoz.textContent = "⏹ Interromper leitura";
+
+            window.speechSynthesis.speak(falaAtual);
+        }
+
+        btnVoz.addEventListener("click", lerEmVozAlta);
+        btnParar.addEventListener("click", pararLeitura);
+
+        // ===== JANELA DE AJUDA =====
+        const btnAjuda = document.getElementById("btnAjuda");
+        const btnFechar = document.getElementById("btnFechar");
+        const modal = document.getElementById("modalAjuda");
+
+        function abrirModal() {
+            modal.classList.add("aberto");
+            modal.setAttribute("aria-hidden", "false");
+            btnFechar.focus();
+        }
+
+        function fecharModal() {
+            modal.classList.remove("aberto");
+            modal.setAttribute("aria-hidden", "true");
+            btnAjuda.focus();
+        }
+
+        btnAjuda.addEventListener("click", abrirModal);
+        btnFechar.addEventListener("click", fecharModal);
+
+        // Fecha ao clicar no fundo escuro.
+        modal.addEventListener("click", function (evento) {
+            if (evento.target === modal) {
+                fecharModal();
+            }
+        });
+
+        // Fecha a janela ao pressionar Esc.
+        document.addEventListener("keydown", function (evento) {
+            if (
+                evento.key === "Escape" &&
+                modal.classList.contains("aberto")
+            ) {
+                fecharModal();
+            }
+        });
+
+        // Interrompe a leitura se a página for fechada ou ocultada.
+        document.addEventListener("visibilitychange", function () {
+            if (document.hidden && lendo) {
+                pararLeitura();
+            }
+        });
+    </script>
+
+</body>
+</html>
